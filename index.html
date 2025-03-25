@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f4f4;
+        }
+        .sidebar {
+            width: 260px;
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            height: 100vh;
+            position: fixed;
+            text-align: center;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .profile-container {
+            position: relative;
+            display: inline-block;
+        }
+        .sidebar img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: block;
+            margin: 10px auto;
+            border: 4px solid white;
+        }
+        .tooltip {
+            visibility: hidden;
+            width: 140px;
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .profile-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .social-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .social-box a {
+            font-size: 27px;
+            color: white;
+            transition: 0.3s;
+        }
+        .social-box a:hover {
+            color: #1abc9c;
+        }
+        .menu-box a {
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 45px 0;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .menu-box a:hover {
+            background: #1abc9c;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: 100%;
+        }
+        .section-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        .section-box.expanded {
+            max-height: 500px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .learn-more {
+            background: #1abc9c;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        .learn-more:hover {
+            background: #16a085;
+        }
+        .hidden-content {
+            display: none;
+            margin-bottom: 25px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #1abc9c;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+        }
+        button[type="submit"] {
+            background: #1abc9c;
+            color: white;
+            padding: 13px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        button[type="submit"]:hover {
+            background: #16a085;
+        }
+
+        .skills-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-top: 10px;
+    }
+    .skill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #1abc9c;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+    }
+    .skill:hover {
+        background: #16a085;
+        transform: scale(1.05);
+    }
+    .skill ion-icon {
+        font-size: 20px;
+    }
+
+    .about-me {
+    display: flex;
+    align-items: center;
+    max-width: 600px; /* Adjust width as needed */
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-image img {
+    width: 100px; /* Adjust as needed */
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.about-content {
+    flex: 1;
+    font-family: Arial, sans-serif;
+}
+
+.about-content p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.about-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-content li {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.project {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.project h3 {
+    margin-bottom: 8px;
+    font-size: 18px;
+    color: #333;
+}
+
+.project p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.project-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn:first-child {
+    background: #333;
+    color: #fff;
+}
+
+.btn:last-child {
+    background: #007bff;
+    color: #fff;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+        padding: 20px;
+    }
+    .content {
+        margin-left: 240px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        text-align: center;
+        padding: 15px;
+    }
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+    .profile-container img {
+        width: 90px;
+        height: 90px;
+    }
+    .social-box {
+        gap: 10px;
+    }
+    .menu-box a {
+        padding: 10px;
+        font-size: 16px;
+    }
+    .section-box {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 10px;
+    }
+    .profile-container img {
+        width: 70px;
+        height: 70px;
+    }
+    .social-box a {
+        font-size: 22px;
+    }
+    .menu-box a {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .content {
+        padding: 15px;
+    }
+    .section-box {
+        padding: 15px;
+    }
+}
+
+
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile-container">
+            <img src="photo.jpg" alt="Profile Picture">
+            <div class="tooltip">Your Name</div>
+        </div>
+        <div class="social-box">
+            <a href="https://github.com/Shareef20" target="_blank"><ion-icon name="logo-github"></ion-icon></a>
+            <a href="https://www.linkedin.com/in/shareef-khan-6b5010312/" target="_blank"><ion-icon name="logo-linkedin"></ion-icon></a>
+        </div>
+        <div class="menu-box">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="section-box" id="about">
+            <h2>About Me</h2>
+            <p>My name is shareef...</p>
+            <div class="hidden-content">
+                <div class="about-me">
+                    <div class="about-image">
+                        <img src="photo.jpg" alt="Your Image">
+                    </div>
+                    <div class="about-content">
+                        <p>
+                            Passionate about the IT sector, always eager to learn and explore new technologies.
+                            Enthusiastic about problem-solving and creating innovative solutions.
+                        </p>
+                        <ul>
+                            <li><strong>Name:</strong> Pathan Shareef</li>
+                            <li><strong>College Name:</strong> CMR Technical Campus</li>
+                            <li><strong>Age:</strong> 22</li>
+                            <li><strong>Email ID:</strong> pshareefk20@gmail.com</li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+            <button class="learn-more">Learn More</button>
+        </div>
+        <div class="section-box" id="skills">
+            <h2>Skills</h2>
+            <p>Following are my skills...</p>
+            <div class="hidden-content">
+                <div class="skills-container">
+                    <div class="skill"><ion-icon name="logo-python"></ion-icon> Python</div>
+                    <div class="skill"><ion-icon name="server"></ion-icon> SQL</div>
+                    <div class="skill"><ion-icon name="cloud"></ion-icon> AWS</div>
+                    <div class="skill"><ion-icon name="logo-html5"></ion-icon> HTML</div>
+                    <div class="skill"><ion-icon name="logo-css3"></ion-icon> CSS</div>
+                    <div class="skill"><ion-icon name="logo-javascript"></ion-icon> JavaScript</div>
+                </div>
+            </div>
+            <button class="learn-more">Learn More</button>
+        </div>
+        <div class="section-box" id="projects">
+            <h2>Projects</h2>
+            <p>Showcase your projects here...</p>
+            <div class="hidden-content">
+                <div class="project">
+                    <h3>Title:JavaScript-calculator</h3>
+                    <p>This project is a simple calculator created using JavaScript, allowing users to perform basic arithmetic operations.</p>
+                    <div class="project-buttons">
+                        <a href="https://github.com/Shareef20/JavaScript-calculator" class="btn" target="_blank">View Code</a>
+                        <a href="https://shareef20.github.io/JavaScript-calculator/" class="btn" target="_blank">View Project</a>
+                    </div>
+                </div>
+                
+                <div class="project">
+                    <h3>Title: Simple-Nature-Landscape-Webpage</h3>
+                    <p>A clean and minimalistic webpage showcasing nature landscape images like mountains, 
+                        forests, and beaches. The site includes a feature image at the top and a responsive image gallery.</p>
+                    <div class="project-buttons">
+                        <a href="https://github.com/Shareef20/Simple-Nature-Landscape-Webpage" class="btn" target="_blank">View Code</a>
+                        <a href="https://shareef20.github.io/Simple-Nature-Landscape-Webpage/" class="btn" target="_blank">View Project</a>
+                    </div>
+                </div>
+            </div>
+            <button class="learn-more">Learn More</button>
+        </div>
+        <div class="section-box" id="contact">
+            <h2>Contact</h2>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    document.querySelectorAll('.learn-more').forEach(button => {
+        button.addEventListener('click', function() {
+            let section = this.parentElement;
+            let content = section.querySelector('.hidden-content');
+            content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
+            this.textContent = content.style.display === 'block' ? 'Show Less' : 'Learn More';
+        });
+    });
+</script>
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+    let confirmation = confirm("You have successfully submitted! Do you want to proceed?");
+    
+    if (confirmation) {
+        alert("Form Submitted Successfully!");
+        this.submit(); // Submit the form programmatically
+    } else {
+        alert("Submission Cancelled!");
+    }
+});
+
+</script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</html>
